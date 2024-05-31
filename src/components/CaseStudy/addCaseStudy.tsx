@@ -40,11 +40,7 @@ interface FormValues {
   file: File | null;
 }
 
-export function AddCaseStudy({
-  children,
-  token,
-  refreshData,
-}: AddCaseStudyProps) {
+export function AddCaseStudy({ children, token, refreshData }: AddCaseStudyProps) {
   const sheetClose = useRef<HTMLButtonElement>(null);
 
   const formSchema = z.object({
@@ -62,10 +58,7 @@ export function AddCaseStudy({
       .refine((value) => value.length > 0, {
         message: "Must add at least one keyword",
       }),
-    drive_url: z
-      .string()
-      .url({ message: "Invalid URL format for Drive URL" })
-      .trim(),
+    drive_url: z.string().url({ message: "Invalid URL format for Drive URL" }).trim().optional(),
     file: z.any().refine(
       (value) => {
         if (!(value instanceof File)) {
@@ -130,10 +123,7 @@ export function AddCaseStudy({
       console.error("Error during API request:", error);
       toast({
         title: "Error",
-        description:
-          error.response?.data?.message ||
-          error.message ||
-          "Something went wrong",
+        description: error.response?.data?.message || error.message || "Something went wrong",
         variant: "destructive",
       });
     }
@@ -141,22 +131,22 @@ export function AddCaseStudy({
 
   return (
     <Sheet>
-      <SheetTrigger asChild onClick={handleSheetTrigger}>
+      <SheetTrigger
+        asChild
+        onClick={handleSheetTrigger}>
         {children}
       </SheetTrigger>
       <SheetContent className={`overflow-y-scroll`}>
         <SheetHeader>
           <SheetTitle>Add Case Study</SheetTitle>
           <SheetDescription>
-            Fill in the case study details below. Click save when you&apos;re
-            done.
+            Fill in the case study details below. Click save when you&apos;re done.
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid gap-4 py-4"
-          >
+            className="grid gap-4 py-4">
             <FormField
               control={form.control}
               name="title"
@@ -184,9 +174,7 @@ export function AddCaseStudy({
                   <FormControl>
                     <TagsInput
                       value={field.value === "" ? [] : field.value.split(",")}
-                      onChange={(newTags: string[]) =>
-                        field.onChange(newTags.join(","))
-                      }
+                      onChange={(newTags: string[]) => field.onChange(newTags.join(","))}
                       name="keywords"
                       placeHolder="Press Enter to add Keywords"
                       classNames={{
@@ -219,19 +207,18 @@ export function AddCaseStudy({
             />
             <FileDrop form={form} />
             <SheetFooter>
-              <Button type="submit" className="mt-4">
+              <Button
+                type="submit"
+                className="mt-4">
                 Save
               </Button>
-              <SheetClose
-                disabled={!!Object.keys(form.formState.errors).length}
-              >
+              <SheetClose disabled={!!Object.keys(form.formState.errors).length}>
                 <Button
                   type="button"
                   className="hidden"
                   disabled={!!Object.keys(form.formState.errors).length}
                   ref={sheetClose}
-                  id="casestudies-button-add-confirm"
-                >
+                  id="casestudies-button-add-confirm">
                   Save
                 </Button>
               </SheetClose>

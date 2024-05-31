@@ -87,10 +87,7 @@ const Page = () => {
       } catch (error: any) {
         toast({
           title: "Error",
-          description:
-            error.response?.data?.message ||
-            error.message ||
-            "Something went wrong",
+          description: error.response?.data?.message || error.message || "Something went wrong",
           variant: "destructive",
         });
       } finally {
@@ -110,8 +107,12 @@ const Page = () => {
           <h1 className="font-semibold text-lg">Case Studies</h1>
         </div>
         {user.role === "ADMIN" && (
-          <AddCaseStudy token={user.token} refreshData={refreshData}>
-            <Button size={"sm"} id="casestudies-button-add">
+          <AddCaseStudy
+            token={user.token}
+            refreshData={refreshData}>
+            <Button
+              size={"sm"}
+              id="casestudies-button-add">
               <PlusIcon className="mr-1 block" />
               Add Case Studies
             </Button>
@@ -132,40 +133,31 @@ const Page = () => {
               </p>
             ) : (
               caseStudies?.map((study, idx) => (
-                <Card key={study._id.$oid}>
-                  <CardHeader className="py-4">
-                    <div className="space-y-2">
-                      <CardTitle className="text-2xl mb-2">
-                        {study.title}
-                      </CardTitle>
-                      <div className="flex flex-wrap gap-2">
-                        {study.keywords.map((keyword, index) => (
-                          <Badge
-                            key={index}
-                            className={`${
-                              badgeColors[index % badgeColors.length]
-                            } text-white`}
-                            variant="outline"
-                          >
-                            {keyword}
-                          </Badge>
-                        ))}
-                      </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400 pt-2 flex gap-1">
-                        <span className="underline">File Path:</span>
-                        {study.file_path}
-                      </div>
+                <Card
+                  key={study._id.$oid}
+                  className="flex flex-col">
+                  <CardHeader className="py-4 flex-1 space-y-2">
+                    <CardTitle className="text-2xl mb-2">{study.title}</CardTitle>
+                    <div className="flex flex-wrap gap-2 flex-1">
+                      {study.keywords.map((keyword, index) => (
+                        <Badge
+                          key={index}
+                          className={`${badgeColors[index % badgeColors.length]} text-white h-min`}
+                          variant="outline">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 pt-2 flex gap-1">
+                      <span className="underline">File Path:</span>
+                      {study.file_path}
                     </div>
                   </CardHeader>
                   <CardFooter className="border-t justify-between pt-4">
                     <div className="text-sm">
-                      <CardDescription className="text-xs">
-                        Created At
-                      </CardDescription>
+                      <CardDescription className="text-xs">Created At</CardDescription>
                       <CardTitle className="text-xs">
-                        {study.createdAt
-                          ? formatDate(study.createdAt.$date)
-                          : "N/A"}
+                        {study.createdAt ? formatDate(study.createdAt.$date) : "N/A"}
                       </CardTitle>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -177,8 +169,7 @@ const Page = () => {
                           itemId={study._id.$oid}
                           token={user.token}
                           refreshData={refreshData}
-                          deletePath="/api/case/delete"
-                        >
+                          deletePath="/api/case/delete">
                           Delete
                         </DeleteDialogBtn>
                       </div>
